@@ -2,6 +2,7 @@ import scala.collection.mutable
 import scala.util.Random
 
 object ChampionsLeagueDraw extends App {
+
   /**
    *
    * @param name          Name des Klubs
@@ -58,6 +59,11 @@ object ChampionsLeagueDraw extends App {
     countMatchesDraw.put(winner.name,           mutable.Map[String, Int]().withDefaultValue(0))
     countMatchesBacktrack.put(winner.name,      mutable.Map[String, Int]().withDefaultValue(0))
     countMatchesRealSimulation.put(winner.name, mutable.Map[String, Int]().withDefaultValue(0))
+  }
+  for (second <- secondPlaces){
+    countMatchesDraw.put(second.name, mutable.Map[String, Int]().withDefaultValue(0))
+    countMatchesBacktrack.put(second.name, mutable.Map[String, Int]().withDefaultValue(0))
+    countMatchesRealSimulation.put(second.name, mutable.Map[String, Int]().withDefaultValue(0))
   }
 
   val random = new Random
@@ -229,6 +235,7 @@ object ChampionsLeagueDraw extends App {
       case Some(pairings) =>
         for ((first, second) <- pairings) {
           countMatchesDraw(first)(second) += 1
+          countMatchesDraw(second)(first) += 1
         }
       case None =>
         failedDraws += 1
@@ -238,6 +245,7 @@ object ChampionsLeagueDraw extends App {
       case Some(pairings) =>
         for ((first, second) <- pairings) {
           countMatchesBacktrack(first.name)(second.name) += 1
+          countMatchesBacktrack(second.name)(first.name) += 1
         }
       case None => ()
     }
@@ -246,6 +254,7 @@ object ChampionsLeagueDraw extends App {
       case pairings =>
         for ((first, second) <- pairings) {
           countMatchesRealSimulation(first)(second) += 1
+          countMatchesRealSimulation(second)(first) += 1
         }
     }
   }
@@ -261,7 +270,7 @@ object ChampionsLeagueDraw extends App {
       val percentage = count.toDouble / successfullDraws * 100
       println(f"$second: $percentage%6.2f%%")
     }
-    println()
+    println
   }
 
   println("\n\nErgebnisse der Backtrack Methode\n")
@@ -272,7 +281,7 @@ object ChampionsLeagueDraw extends App {
       val percentage = count.toDouble / numberOfDraws * 100
       println(f"$second: $percentage%6.2f%%")
     }
-    println()
+    println
   }
 
   println(failedDraws)
@@ -286,6 +295,6 @@ object ChampionsLeagueDraw extends App {
       val percentage = count.toDouble / numberOfDraws * 100
       println(f"$second: $percentage%6.2f%%")
     }
-
+    println
   }
 }
